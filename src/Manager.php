@@ -26,17 +26,17 @@ class Manager extends BaseManager
     protected $is_lumen = false;
 
     /**
-     * @param Application $app
+     * @param Application $container
      */
-    public function __construct($app = null)
+    public function __construct($container = null)
     {
-        if (!$app) {
-            $app = app();   //Fallback when $app is not given
+        if (!$container) {
+            $container = app();   //Fallback when $container is not given
         }
 
-        parent::__construct($app);
+        parent::__construct($container);
 
-        $this->version = $app->version();
+        $this->version = $container->version();
         $this->is_lumen = Str::contains($this->version, 'Lumen');
     }
 
@@ -49,12 +49,12 @@ class Manager extends BaseManager
     {
         $path = config('setting.json.path');
 
-        return new Json($this->app['files'], $path);
+        return new Json($this->container['files'], $path);
     }
 
     public function createDatabaseDriver()
     {
-        $connection = $this->app['db']->connection(config('setting.database.connection'));
+        $connection = $this->container['db']->connection(config('setting.database.connection'));
         $table = config('setting.database.table');
         $key = config('setting.database.key');
         $value = config('setting.database.value');
